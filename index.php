@@ -1,4 +1,5 @@
 <?php
+phpinfo();
 /**
 * @license http://opensource.org/licenses/MIT
 *
@@ -18,7 +19,7 @@ $channel = filter_input(INPUT_GET, "channel");
 
 if(empty($channel))
 {
-    echo 'need to channel name';
+    echo 'Please enter your channel.';
     exit;
 }
 

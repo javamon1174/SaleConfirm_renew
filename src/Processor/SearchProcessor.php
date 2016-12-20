@@ -29,7 +29,7 @@ class SearchProcessor {
         foreach ($this->company as $asso_array => $company) {
             $channel_curl_processor = $this->factory("Processor\ChannelCurlProcessor");
             $channel_curl_processor->getDataCompany($company);
-            
+
             //testing cl
             exit;
         }
@@ -70,7 +70,7 @@ class SearchProcessor {
         return true;
     }
 
-    private function removeResouce($resouce)
+    protected function removeResouce($resouce)
     {
         unset($resouce);
         return true;

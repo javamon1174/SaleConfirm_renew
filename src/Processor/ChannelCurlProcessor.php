@@ -7,13 +7,15 @@ use Curl;
 class ChannelCurlProcessor extends SearchProcessor
 {
     use SaleConfirm\Config;
+
     //주석
     public function getDataCompany($company)
     {
         $channels = $this->processorInit($company);
+        //타이틀 에러 11st akmall auction
         foreach ($channels as $asso_array => $channel) {
             /* test single channel */
-            // $channel['channel'] = 'ShinsegaeMall';
+            $channel['channel'] = '11st';
             $channel_result_info = $this->getDefaultDataOfReport($company);
             $channel_url = $this->getChannelUrl($channel);
             if (!$channel_url)
@@ -22,17 +24,19 @@ class ChannelCurlProcessor extends SearchProcessor
             }
             else
             {
+                var_dump($channel['channel']);exit;
+
                 $shop_code = $this->getProductInfoOfChennel($company, $channel['channel']);
                 $channel_result_all_data[] = $this->singleContentsController($shop_code, $channel_url, $channel['channel']);
             }
         }
-
         foreach ($channel_result_all_data as $channel_result_data) {
-            $commit_result_array = $this->insertResultData($company, $channel_result_data, $channel_result_info);
+            $commit_result_array[] = $this->insertResultData($company, $channel_result_data, $channel_result_info);
         }
         $this->removeResouce($channel_result_all_data);
         var_dump($commit_result_array);exit;
     }
+
     /**
     *** @param string company
     *** @param string channel
@@ -47,6 +51,7 @@ class ChannelCurlProcessor extends SearchProcessor
         $product_info = $this->query_excute_model->QueryExcuteModel("SelectQuery", $query, null);
         return $product_info;
     }
+
     /**
     *** @param string company
     *** @return array mall list of company
@@ -57,6 +62,7 @@ class ChannelCurlProcessor extends SearchProcessor
         $query = $this->query_make_model->ReturnQueryModel("GetQueryMallList", $company);
         return $this->query_excute_model->QueryExcuteModel("selectQuery", $query, null);
     }
+
     private function channelNameException($channel)
     {
         switch ($channel) {
@@ -136,10 +142,7 @@ class ChannelCurlProcessor extends SearchProcessor
                                  );
         $query = $this->query_make_model->ReturnQueryModel("getQueryInsertData", $channel_result_data);
         $commit_result = $this->query_excute_model->QueryExcuteModel("insertQuery", $query, $basic_array_data);
-        if ($commit_result)
-            echo "success";
-        else
-            echo "fale"; exit;
+        return $commit_result;
     }
 
     /**
@@ -205,7 +208,6 @@ class ChannelCurlProcessor extends SearchProcessor
         // var_dump($result);exit;
         return $result;
     }
-
     /**
     *** @brief These functions get data from each shopcode and name of function is value in db
     *** @param array parsed data(each shop code)
@@ -339,7 +341,7 @@ class ChannelCurlProcessor extends SearchProcessor
                                             $sale_status,
                                             $channel
                                           );
-        }
+    }
 
     private function _ShinsegaeGangnam(
                                         $data,
@@ -1436,10 +1438,10 @@ class ChannelCurlProcessor extends SearchProcessor
     *** @return array result_channel_data
     **/
     private function singleContentsController(
-        $shop_code = array(),
-        $url = '',
-        $channel_ = ''
-        )
+                                                $shop_code = array(),
+                                                $url = '',
+                                                $channel_ = ''
+                                             )
     {
         $channel = '_'.$this->channelNameException($channel_);
         $channel = str_replace('.', "_", $channel);

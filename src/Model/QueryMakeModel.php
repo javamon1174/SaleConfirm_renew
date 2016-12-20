@@ -42,7 +42,7 @@ class QueryMakeModel
         //all channel test
         return "SELECT S.pcode, S.shop_code, M.retail_price FROM ".$data['company']."_product_sub S LEFT JOIN ".$data['company']
                ."_product_main M ON S.pcode = M.pcode WHERE S.channel LIKE '".$data['channel']."' AND S.sale_yn != 'N'
-               GROUP BY S.shop_code LIMIT 1;";
+               GROUP BY S.shop_code LIMIT 3;";
 
         return "SELECT S.pcode, S.shop_code, M.retail_price FROM ".$data['company']."_product_sub S LEFT JOIN ".$data['company']
                ."_product_main M ON S.pcode = M.pcode WHERE S.channel LIKE '".$data['channel']."' AND S.sale_yn != 'N'
